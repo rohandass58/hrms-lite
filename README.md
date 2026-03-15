@@ -60,55 +60,6 @@ A lightweight, production-ready Human Resource Management System (HRMS) built wi
 ┌───────────────────────▼─────────────────────────────────┐
 │             PostgreSQL (Render / Supabase)               │
 └─────────────────────────────────────────────────────────┘
-```
-
----
-
-## Local Development Setup
-
-### Prerequisites
-
-- Python 3.11+
-- Node.js 18+
-- PostgreSQL (local or cloud)
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/hrms-lite.git
-cd hrms-lite
-```
-
-### 2. Backend setup
-
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-cp .env.example .env
-# Edit .env and set your values:
-#   SECRET_KEY, DATABASE_URL, etc.
-
-python manage.py migrate
-python manage.py createsuperuser  # optional
-python manage.py runserver        # runs on http://localhost:8000
-```
-
-### 3. Frontend setup
-
-```bash
-cd ../frontend
-npm install
-
-cp .env.example .env
-# .env already contains: VITE_API_BASE_URL=http://localhost:8000
-
-npm run dev                       # runs on http://localhost:5173
-```
-
----
 
 ## API Reference
 
@@ -138,59 +89,7 @@ All errors return JSON:
 
 **HTTP Status Codes:** `200`, `201`, `204`, `400`, `404`, `409`, `500`
 
----
 
-## Deployment
-
-### Backend on Render
-
-1. Create a **Web Service** on [render.com](https://render.com)
-2. Connect your GitHub repo; set **Root Directory** to `backend`
-3. **Build Command:** `pip install -r requirements.txt`
-4. **Start Command:** `gunicorn hrms.wsgi --log-file -`
-5. Add these **Environment Variables** in Render:
-
-   | Key                    | Value                                  |
-   |------------------------|----------------------------------------|
-   | `SECRET_KEY`           | A long random string                   |
-   | `DEBUG`                | `False`                                |
-   | `DATABASE_URL`         | PostgreSQL connection string           |
-   | `ALLOWED_HOSTS`        | `yourapp.onrender.com`                 |
-   | `CORS_ALLOWED_ORIGINS` | `https://yourapp.vercel.app`           |
-
-6. Add a **PostgreSQL** database in Render → link it (sets `DATABASE_URL` automatically)
-7. After first deploy, run migrations via Render Shell: `python manage.py migrate`
-
-### Frontend on Vercel
-
-1. Import your GitHub repo on [vercel.com](https://vercel.com)
-2. Set **Root Directory** to `frontend`
-3. **Framework Preset:** Vite
-4. **Environment Variable:**
-
-   | Key                 | Value                              |
-   |---------------------|------------------------------------|
-   | `VITE_API_BASE_URL` | `https://yourapp.onrender.com`     |
-
-5. Click **Deploy** ✓
-
----
-
-## Assumptions & Limitations
-
-- Employee deletion cascades to all their attendance records (by design, `on_delete=CASCADE`)
-- Attendance is restricted to exactly "Present" or "Absent" — no partial or leave types
-- No authentication in this lite version (suitable for internal/trusted network use)
-- SQLite is used as fallback when no `DATABASE_URL` is set (for quick local testing without PostgreSQL)
-- The free tier of Render spins down after inactivity — the first request after idle may be slow (~30s)
-
----
-
-## Screenshots
-
-> _Add screenshots of Dashboard, Employees, and Attendance pages here after deployment._
-
----
 
 ## License
 
