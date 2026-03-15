@@ -56,6 +56,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
 
 
 class AttendanceSummarySerializer(serializers.ModelSerializer):
+    total_present = serializers.IntegerField(read_only=True)
     class Meta:
         model = Employee
         fields = ["id", "employee_id", "full_name", "department", "total_present"]
