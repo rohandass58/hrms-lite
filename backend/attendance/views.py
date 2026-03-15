@@ -6,7 +6,7 @@ from hrms.pagination import StandardPagination
 from hrms.response import ApiResponse
 from employees.models import Employee
 from .models import Attendance
-from .serializers import AttendanceSerializer
+from .serializers import AttendanceSerializer, AttendanceSummarySerializer
 
 
 class AttendanceListCreateView(DataTableView):
@@ -36,6 +36,7 @@ class AttendanceListCreateView(DataTableView):
 class AttendanceSummaryView(DataTableMixin, APIView):
     
     pagination_class = StandardPagination
+    serializer_class = AttendanceSummarySerializer
     
     search_fields = ["full_name", "employee_id", "department"]
     filter_fields = ["department"]
@@ -59,29 +60,11 @@ class AttendanceSummaryView(DataTableMixin, APIView):
         page = paginator.paginate_queryset(queryset, request)
         
         if page is not None:
-            data = [
-                {
-                    "id": emp.id,
-                    "employee_id": emp.employee_id,
-                    "full_name": emp.full_name,
-                    "department": emp.department,
-                    "total_present": emp.total_present,
-                }
-                for emp in page
-            ]
-            return paginator.get_paginated_response(data)
+            serializer = self.serializer_class(page, many=True)
+            return paginator.get_paginated_response(serializer.data)
         
-        data = [
-            {
-                "id": emp.id,
-                "employee_id": emp.employee_id,
-                "full_name": emp.full_name,
-                "department": emp.department,
-                "total_present": emp.total_present,
-            }
-            for emp in queryset
-        ]
+        serializer = self.serializer_class(queryset, many=True)
         return ApiResponse.success(
-            data=data,
+            data=serializer.data,
             message="Attendance summary fetched successfully"
         )

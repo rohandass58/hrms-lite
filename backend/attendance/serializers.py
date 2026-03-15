@@ -54,3 +54,9 @@ class AttendanceSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Please select either 'Present' or 'Absent' as the status.")
         return value
 
+
+class AttendanceSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ["id", "employee_id", "full_name", "department", "total_present"]
+
