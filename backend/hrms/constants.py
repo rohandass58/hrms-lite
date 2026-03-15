@@ -1,0 +1,10 @@
+# Response type constants
+RESPONSE_TYPE_SUCCESS = "success"
+RESPONSE_TYPE_ERROR = "error"
+RESPONSE_TYPE_VALIDATION_ERROR = "validation_error"
+RESPONSE_TYPE_NOT_FOUND = "not_found"
+RESPONSE_TYPE_UNAUTHORIZED = "unauthorized"
+RESPONSE_TYPE_FORBIDDEN = "forbidden"
+RESPONSE_TYPE_THROTTLED = "throttled"
+RESPONSE_TYPE_SERVER_ERROR = "server_error"
+
